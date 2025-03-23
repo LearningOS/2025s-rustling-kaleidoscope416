@@ -33,7 +33,7 @@ struct LinkedList<T> {
 
 impl<T> Default for LinkedList<T> {
     fn default() -> Self {
-        Self::new()
+        Self::new();
     }
 }
 
