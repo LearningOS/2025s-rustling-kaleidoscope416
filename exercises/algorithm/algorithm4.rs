@@ -1,9 +1,3 @@
-/*
-	binary_search tree
-	This problem requires you to implement a basic interface for a binary tree
-*/
-
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -11,7 +5,7 @@ use std::fmt::Debug;
 #[derive(Debug)]
 struct TreeNode<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     value: T,
     left: Option<Box<TreeNode<T>>>,
@@ -21,14 +15,14 @@ where
 #[derive(Debug)]
 struct BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     root: Option<Box<TreeNode<T>>>,
 }
 
 impl<T> TreeNode<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     fn new(value: T) -> Self {
         TreeNode {
@@ -41,7 +35,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
 
     fn new() -> Self {
@@ -51,22 +45,64 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        //DONE
+       if let None = self.root{
+        let mut t_n = TreeNode::new(value);
+        self.root = Some(Box::new(t_n));
+       }
+       else{
+        self.root.as_mut().unwrap().insert(value);
+       }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        fn search_node<T: Ord+Clone>(node: &Option<Box<TreeNode<T>>>, value: &T) -> bool {
+            match node {
+                None => false,
+                Some(node) => match value.cmp(&node.value) {
+                    Ordering::Equal => true,
+                    Ordering::Less => search_node(&node.left, value),
+                    Ordering::Greater => search_node(&node.right, value),
+                },
+            }
+        }
+
+        search_node(&self.root, &value)
     }
 }
 
+
 impl<T> TreeNode<T>
 where
-    T: Ord,
+    T: Ord+Clone,
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        //DONE
+        let mut new_tn = TreeNode::new(value.clone());
+        if new_tn.value<self.value{
+            if self.left.is_none(){
+                self.left = Some(Box::new(new_tn));
+            }
+            else {
+                self.left.as_mut().unwrap().insert(value);
+            }
+        }
+        else if new_tn.value>self.value{
+            if self.right.is_none(){
+                self.right = Some(Box::new(new_tn));
+            }
+            else {
+                self.right.as_mut().unwrap().insert(value);
+            }
+        }
+        else{
+            return
+        }
+
+       
     }
 }
 
